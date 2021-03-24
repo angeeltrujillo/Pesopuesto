@@ -14,7 +14,7 @@ export class Transaction {
     @Column()
     description: string;
 
-    @Column({ type: "numeric" })
+    @Column({ type: "real" })
     amount: number;
 
     @Column({ type: "date"})
@@ -33,10 +33,8 @@ export class Transaction {
     updateBalance() {
         if (this.type === "income") {
             getRepository(Account).increment({id: this.account}, 'balance', this.amount);
-            console.log(`Se agrego ${this.amount} a la cuenta ${this.account}`);
         } else {
             getRepository(Account).decrement({id: this.account}, 'balance', this.amount);
-            console.log(`Se quitó ${this.amount} a la cuenta ${this.account}`)
         }
     }
 }

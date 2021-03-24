@@ -14,7 +14,7 @@ createConnection({
     entities: [
         __dirname + '/Components/*/*.entity.ts'
     ],
-    synchronize: true,
+    synchronize: process.env.NODE_ENV !== 'production' ? true : false,
     logging: false
 }).then(connection => {
     console.log("Conectado a la base de datos")

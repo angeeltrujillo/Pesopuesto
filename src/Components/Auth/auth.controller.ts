@@ -45,7 +45,6 @@ export const userSignUp: RequestHandler = async (req, res, next) => {
       }
     });
   } catch (error) {
-    console.log(error);
     if (error.name === 'ValidationError') {
       return next(new AppError(400, 'Petición incorrecta', error.message));
     }

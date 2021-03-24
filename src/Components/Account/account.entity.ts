@@ -13,7 +13,7 @@ export class Account {
     @Column({nullable: true})
     description: string;
 
-    @Column({ type: 'numeric', default: 0})
+    @Column({ type: 'real', default: 0})
     balance: number;
 
     @ManyToOne(() => User, user => user.accounts)
