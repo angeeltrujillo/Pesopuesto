@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Account } from '../Account/account.entity'
 
 @Entity()
 export class User {
@@ -27,8 +28,11 @@ export class User {
     providerId: string;
 
     @Column({ nullable: true })
-    userPictureUrl: string;
+    photoUrl: string;
 
-    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
+    @OneToMany(() => Account, account => account.user)
+    accounts: Account[];
+
+    @Column({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP'})
     createdAt: Date;
 }

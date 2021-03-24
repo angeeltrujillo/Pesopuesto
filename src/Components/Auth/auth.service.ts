@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { getRepository } from "typeorm";
 import { User } from '../User/user.entity';
-import { AppError } from '../../Config/Helpers';
 
 export interface IUser {
   id?: number,
@@ -11,10 +10,8 @@ export interface IUser {
   lastName?: string,
   userName?: string,
   provider?: string,
-  userPictureUrl?: string,
+  photoUrl?: string,
   email?: string,
-  // TODO: Lookup Union Types that work with Promise<String> and string
-  // See: https://github.com/microsoft/TypeScript/issues/29815
   password?: any,
   _id? : string,
   createdAt?: Date
@@ -28,7 +25,7 @@ export const singUpValidator = async (userDetails: IUser) => {
     email: joi.string().required().email(),
     password: joi.string().required(),
     provider: joi.string(),
-    userPictureUrl: joi.string(),
+    photoUrl: joi.string(),
   });
   const validUser: IUser = await schema.validateAsync(userDetails);
   return validUser;
@@ -96,11 +93,6 @@ export const getPasswordResetUrl = (userId: number, token: string) => {
 
 export const verifyToken = (user: IUser, token: string) => {
   const secret: string = `${user.password}-${user.createdAt}`;
-  try {
     const payload = jwt.verify(token, secret);
     return payload;
-  } catch(error) {
-    console.log(error)
-  }
-  
 }

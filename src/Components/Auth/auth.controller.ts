@@ -17,9 +17,6 @@ import {
 } from './auth.service';
 import { AppError } from '../../Config/Helpers';
 import { ForgotPasswordEmail } from '../../Config/Mail';
-import jwt from 'jsonwebtoken';
-
-
 // eslint-disable-next-line no-unused-vars
 const passportConfig = require('../../Config/Passport');
 
@@ -55,7 +52,7 @@ export const userSignUp: RequestHandler = async (req, res, next) => {
     if (error.name === 'QueryFailedError' && error.code === '23505') {
       return next(new AppError(400, 'Petición incorrecta', 'Ya existe el correo electrónico'));
     }
-    return next(error);
+    next(error);
   }
 };
 
@@ -89,16 +86,21 @@ export const userLogin: RequestHandler = async (req, res, next) => {
 };
 
 export const userAuth: RequestHandler = async (req, res, next) => {
-  passport.authenticate('jwt', (err, user) => {
-    if (err) {
-      return next(new AppError(401, 'No autorizado', 'No ha iniciado sesión. Inicie sesión para continuar.'));
-    }
-    if (!user) {
-      return next(new AppError(401, 'No autorizado', 'No ha iniciado sesión. Inicie sesión para continuar.'));
-    }
-    user.password = undefined;
-    req.logIn(user, { session: false }, (err) => next(err));
-  })(req, res, next);
+  try {
+    passport.authenticate('jwt', (err, user) => {
+      if (err) {
+        return next(new AppError(401, 'No autorizado', 'No ha iniciado sesión. Inicie sesión para continuar.'));
+      }
+      if (!user) {
+        return next(new AppError(401, 'No autorizado', 'No ha iniciado sesión. Inicie sesión para continuar.'));
+      }
+      user.password = undefined;
+      req.logIn(user, { session: false }, (err) => next(err));
+    })(req, res, next);
+
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const OAuthHandler: RequestHandler = async (req, res, next) => {
@@ -122,42 +124,43 @@ export const OAuthHandler: RequestHandler = async (req, res, next) => {
 };
 
 export const userForgotPassword: RequestHandler = async (req, res, next) => {
-  let email: string = req.body.email;
-  const user: IUser = await findUserByEmail(email);
-  if (user) {
-    const token: string = tokenForgotPassword(user);
-    const url: string = getPasswordResetUrl(user.id, token);
-    await ForgotPasswordEmail(user.email, url);
-    return res.status(202).json({
-      status: 'Sucess',
-      message: "Correo electrónico programado para envío"
-    }); 
-  } else {
-    return next(new AppError(401, 'No autorizado', 'Usuario inexistente'));
-  }
-};
-
-export const userSetNewPassword: RequestHandler = async (req, res, next) => {
-  const { id, token } = req.params;
-  const { newPassword } = req.body;
-  console.log(req.params);
-  const user: IUser = await findUserById(parseInt(id));
-  if (user) {
-    console.log(user);
-    const payload = verifyToken(user, token);
-    if ((<any>payload).id == user.id) {
-      const hashedPassword : string = await hashPassword(newPassword);
-      user.password = hashedPassword;
-      const updatedUser = await updateUser(user)
-      return res.status(200).json({
+  try {
+    let email: string = req.body.email;
+    const user: IUser = await findUserByEmail(email);
+    if (user) {
+      const token: string = tokenForgotPassword(user);
+      const url: string = getPasswordResetUrl(user.id, token);
+      await ForgotPasswordEmail(user.email, url);
+      return res.status(202).json({
         status: 'Sucess',
-        message: "Cambio exitoso"
+        message: "Correo electrónico programado para envío"
       }); 
     } else {
       return next(new AppError(401, 'No autorizado', 'Usuario inexistente'));
     }
-  } else {
-    return next(new AppError(401, 'No autorizado', 'Usuario inexistente'));
+  } catch (error) {
+    next(error);
   }
+};
 
+export const userSetNewPassword: RequestHandler = async (req, res, next) => {
+  try {
+    const { id, token } = req.params;
+    const { newPassword } = req.body;
+    const user: IUser = await findUserById(parseInt(id));
+    const payload = verifyToken(user, token);
+      if ((<any>payload).id == user.id) {
+        const hashedPassword : string = await hashPassword(newPassword);
+        user.password = hashedPassword;
+        const updatedUser = await updateUser(user)
+        return res.status(204).json({
+          status: 'Sucess',
+          data: {
+            updatedUser
+          }
+        }); 
+    }
+  } catch (error) {
+    next(error)
+  }
 }

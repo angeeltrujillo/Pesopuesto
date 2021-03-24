@@ -43,7 +43,7 @@ export const OAuthUserCreation = async (profile: any) => {
     provider: profile.provider,
     providerId: profile.id,
     email: profile.emails[0]?.value,
-    userPictureUrl: profile.photos[0]?.value,
+    photoUrl: profile.photos[0]?.value,
   });
   const newUser = await getRepository(User).save(result)
   return newUser;
