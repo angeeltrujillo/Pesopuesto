@@ -1,32 +1,43 @@
 import { RequestHandler } from 'express';
-import { User } from '../User/user.entity';
-import { Account } from './account.entity';
-import { getRepository } from "typeorm";
+import { accountValidator, findAccount, IAccount, saveAccount } from './account.service';
 
-export const newAccount: RequestHandler = async (req, res, next)  => {
-  try {
-        const account1 = new Account()
-        account1.name = "Santander"
-        account1.description = "Cuenta free"
-        await getRepository(Account).save(account1)
-
-        const user = new User()
-        user.firstName = "Angel"
-        user.lastName = "Trujillo"
-        user.userName = "angeeltrujillo"
-        user.email = "angeeltrujillo@gmail.com"
-        user.password = "abc123"
-        user.provider = "local"
-        user.accounts = [account1]
-        await getRepository(User).save(user);
-        return res.status(200)
-
-  } catch (err) {
-    return next(err);
-  }
+export const createAccount: RequestHandler = async (req, res, next)  => {
+    try {
+        const accountDetails: IAccount = req.body;
+        const validAccount = await accountValidator(accountDetails);
+        const account = await saveAccount(validAccount);
+        return res.status(201).json({
+            status: 'Sucess',
+            data: {
+                account
+            }
+        })
+    } catch (error) {
+        next(error);
+    }
 };
 
-export const allAccounts: RequestHandler = async (req, res, next)  => {
-    const users = await getRepository(User).findByIds([1], {relations: ["accounts"] })
-    return res.status(200).json(users)
-}
+export const readAccounts: RequestHandler = async (req, res, next)  => {
+};
+
+export const getAccount: RequestHandler = async (req, res, next)  => {
+    try {
+        const { id } = req.params;
+        const account = await findAccount(parseInt(id));
+        return res.status(200).json({
+            status: 'Sucess',
+            data: {
+                account
+            }
+        })
+    } catch (error) {
+        next(error);
+    }
+
+};
+
+export const updateAccount: RequestHandler = async (req, res, next) => {
+};
+
+export const deleteAccount: RequestHandler = async (req, res, next) => {
+};

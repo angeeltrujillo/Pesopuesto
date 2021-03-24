@@ -20,8 +20,8 @@ passport.use(new JwtStrategy({
   secretOrKey: process.env.JWT_SECRET,
 }, (async (jwtPayload, done) => {
     try {
-      const user = await getRepository(User).findOne({id:jwtPayload.id});
-      if (!user) {
+      const user = await getRepository(User).findOne(jwtPayload.id);
+      if (user) {
         return done(null, user)
       } else {
         return done(null, false, { message: 'Incorrect password.' }); 

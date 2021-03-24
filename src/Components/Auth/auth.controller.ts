@@ -42,7 +42,7 @@ export const userSignUp: RequestHandler = async (req, res, next) => {
       token,
       data: {
         user,
-      },
+      }
     });
   } catch (error) {
     console.log(error);

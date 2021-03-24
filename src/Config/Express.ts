@@ -8,6 +8,7 @@ import { undefinedRoute, errorHandler } from './Helpers';
 import authRoutes from '../Components/Auth/auth.routes';
 import userRoutes from '../Components/User/user.routes';
 import accountRoutes from '../Components/Account/account.routes';
+import transactionRoutes from '../Components/Transaction/transaction.routes';
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(passport.initialize());
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/account', accountRoutes);
+app.use('/api/v1/transaction', transactionRoutes);
 
 app.use('*', undefinedRoute);
 app.use(errorHandler);

@@ -10,8 +10,11 @@ export class Account {
     @Column()
     name: string;
 
-    @Column()
+    @Column({nullable: true})
     description: string;
+
+    @Column({ type: 'numeric', default: 0})
+    balance: number;
 
     @ManyToOne(() => User, user => user.accounts)
     user: number;
@@ -19,6 +22,6 @@ export class Account {
     @OneToMany( () => Transaction, transaction => transaction.account)
     transactions: Transaction[];
 
-    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
+    @Column({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP'})
     createdAt: Date;
 }

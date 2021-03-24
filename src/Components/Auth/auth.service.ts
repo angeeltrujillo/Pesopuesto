@@ -46,7 +46,7 @@ export const tokenForgotPassword = (userDetail: IUser) => {
 
 export const createUser = async (userDetail: IUser) => {
   const result = getRepository(User).create(userDetail);
-  const user = await getRepository(User).save(result)
+  const user = await getRepository(User).save(result);
   return user;
 };
 

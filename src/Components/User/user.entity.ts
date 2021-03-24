@@ -21,7 +21,7 @@ export class User {
     @Column({ nullable: true })
     password: string;
 
-    @Column({ enum: ['local', 'google', 'facebook'] })
+    @Column({type: "enum", enum: ['local', 'google', 'facebook'] })
     provider: string;
 
     @Column({ nullable: true })
