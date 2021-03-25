@@ -56,7 +56,7 @@ export const getAccount: RequestHandler = async (req, res, next)  => {
     try {
         const user: IUser = req.user;
         const userId: number = user.id;
-        const accountId  = parseInt(req.params.id);
+        const accountId  = parseInt(req.params.id, 10);
         const account = await findAccount(accountId, userId);
         if (account) {
             return res.status(200).json({
@@ -82,7 +82,7 @@ export const updateAccount: RequestHandler = async (req, res, next) => {
     try {
         const user: IUser = req.user;
         const userId = user.id;
-        const accountId = parseInt(req.params.id);
+        const accountId = parseInt(req.params.id, 10);
         const accountDetails: IAccount = req.body;
         const validAccount = await accountValidator({...accountDetails, 'user': userId});
         const account = await upgradeAccount(accountId, userId, validAccount);
@@ -100,7 +100,7 @@ export const deleteAccount: RequestHandler = async (req, res, next) => {
     try {
         const user: IUser = req.user;
         const userId: number = user.id;
-        const accountId: number = parseInt(req.params.id);
+        const accountId: number = parseInt(req.params.id, 10);
         const account = await removeAccount(accountId, userId);
         if (account.affected > 0) {
             return res.status(202).json({

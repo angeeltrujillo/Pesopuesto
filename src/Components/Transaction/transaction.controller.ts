@@ -59,7 +59,7 @@ export const getTransaction: RequestHandler = async (req, res, next)  => {
     try {
         const user: IUser = req.user;
         const userId: number = user.id;
-        const transactionId: number = parseInt(req.params.id);
+        const transactionId: number = parseInt(req.params.id, 10);
         const transaction = await findTransaction(transactionId, userId);
         if (transaction) {
             return res.status(200).json({
@@ -84,7 +84,7 @@ export const updateTransaction: RequestHandler = async (req, res, next) => {
     try {
         const user: IUser = req.user;
         const userId: number = user.id;
-        const transactionId = parseInt(req.params.id);
+        const transactionId = parseInt(req.params.id, 10);
         const transactionDetails: ITransaction = req.body;
         const transactionData = await dataValidator({...transactionDetails, 'user': userId });
         const validTransaction = await transactionValidator(transactionData);
@@ -111,7 +111,7 @@ export const deleteTransaction: RequestHandler = async (req, res, next) => {
     try {
         const user: IUser = req.user;
         const userId: number = user.id;
-        const transactionId: number = parseInt(req.params.id);
+        const transactionId: number = parseInt(req.params.id, 10);
         const transaction = await removeTransaction(transactionId, userId);
         if (transaction.affected > 0) {
             return res.status(202).json({

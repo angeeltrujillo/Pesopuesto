@@ -24,7 +24,7 @@ passport.use(new JwtStrategy({
       if (user) {
         return done(null, user)
       } else {
-        return done(null, false, { message: 'Incorrect password.' }); 
+        return done(null, false, { message: 'Incorrect password.' });
       }
     } catch (error) {
       return done(error, false)

@@ -40,8 +40,8 @@ export const hashPassword = async (password: string) => {
 export const tokenForgotPassword = (userDetail: IUser) => {
   const { id, password, createdAt } = userDetail;
   const secret = `${password}-${createdAt}`;
-  const tokenForgotPassword: string = jwt.sign({id}, secret, {expiresIn: 3600});
-  return tokenForgotPassword;
+  const tokenForgetPassword: string = jwt.sign({id}, secret, {expiresIn: 3600});
+  return tokenForgetPassword;
 }
 
 export const createUser = async (userDetail: IUser) => {

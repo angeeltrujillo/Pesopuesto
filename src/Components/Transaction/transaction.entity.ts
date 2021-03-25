@@ -20,7 +20,7 @@ export class Transaction {
 
     @Column({ type: "date"})
     date: Date;
-    
+
     @Column({ type: "enum", enum: TransactionType, default: TransactionType.EXPENSE})
     type: TransactionType;
 

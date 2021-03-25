@@ -4,7 +4,7 @@ import { Account } from './account.entity';
 
 export interface IAccount {
     id?: number,
-    name?: string, 
+    name?: string,
     description?: string,
     balance?: number,
     user?: number,

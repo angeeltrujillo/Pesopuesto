@@ -17,7 +17,7 @@ import {
 } from './auth.service';
 import { AppError } from '../../Config/Helpers';
 import { ForgotPasswordEmail } from '../../Config/Mail';
-// eslint-disable-next-line no-unused-vars
+
 const passportConfig = require('../../Config/Passport');
 
 export const userSignUp: RequestHandler = async (req, res, next) => {
@@ -94,7 +94,7 @@ export const userAuth: RequestHandler = async (req, res, next) => {
         return next(new AppError(401, 'No autorizado', 'No ha iniciado sesión. Inicie sesión para continuar.'));
       }
       user.password = undefined;
-      req.logIn(user, { session: false }, (err) => next(err));
+      req.logIn(user, { session: false }, (error) => next(error));
     })(req, res, next);
 
   } catch (error) {
@@ -124,7 +124,7 @@ export const OAuthHandler: RequestHandler = async (req, res, next) => {
 
 export const userForgotPassword: RequestHandler = async (req, res, next) => {
   try {
-    let email: string = req.body.email;
+    const email: string = req.body.email;
     const user: IUser = await findUserByEmail(email);
     if (user) {
       const token: string = tokenForgotPassword(user);
@@ -133,7 +133,7 @@ export const userForgotPassword: RequestHandler = async (req, res, next) => {
       return res.status(202).json({
         status: 'Sucess',
         message: "Correo electrónico programado para envío"
-      }); 
+      });
     } else {
       return next(new AppError(401, 'No autorizado', 'Usuario inexistente'));
     }
@@ -144,11 +144,12 @@ export const userForgotPassword: RequestHandler = async (req, res, next) => {
 
 export const userSetNewPassword: RequestHandler = async (req, res, next) => {
   try {
-    const { id, token } = req.params;
+    const id = parseInt(req.params.id, 10);
+    const token = req.params.token;
     const { newPassword } = req.body;
-    const user: IUser = await findUserById(parseInt(id));
+    const user: IUser = await findUserById(id);
     const payload = verifyToken(user, token);
-      if ((<any>payload).id == user.id) {
+      if ((payload as any).id === user.id) {
         const hashedPassword : string = await hashPassword(newPassword);
         user.password = hashedPassword;
         const updatedUser = await updateUser(user)
@@ -157,7 +158,7 @@ export const userSetNewPassword: RequestHandler = async (req, res, next) => {
           data: {
             updatedUser
           }
-        }); 
+        });
     }
   } catch (error) {
     next(error)
