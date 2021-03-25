@@ -58,7 +58,6 @@ export const getAccount: RequestHandler = async (req, res, next)  => {
         const userId: number = user.id;
         const accountId  = parseInt(req.params.id);
         const account = await findAccount(accountId, userId);
-        console.log(account);
         if (account) {
             return res.status(200).json({
                 status: 'Sucess',

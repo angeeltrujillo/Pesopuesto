@@ -28,7 +28,6 @@ export const dataValidator = async (transactionDetails: ITransaction) => {
 
 export const transactionValidator = async (transactionData: ITransaction) => {
     const validateTransaction = await getRepository(Account).find({where: {id: transactionData.account, user: transactionData.user}});
-    console.log(validateTransaction);
     if (validateTransaction.length > 0) {
         return transactionData;
     } else {
