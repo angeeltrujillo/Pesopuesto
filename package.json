@@ -7,7 +7,7 @@
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
     "prestart": "npm run build",
-    "start": "node .",
+    "start": "tsc && node dist/server.js",
     "dev": "nodemon --config nodemon.json src/server.ts",
     "test": "mocha -r ts-node/register ./src/Components/**/*.test.ts"
   },

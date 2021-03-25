@@ -7,7 +7,6 @@ if (process.env.NODE_ENV !== 'production') dotenv.config();
 
 const port : string = process.env.PORT || '5000';
 const databaseUri : string = process.env.DB_URI;
-
 createConnection({
     type: "postgres",
     url: databaseUri,
