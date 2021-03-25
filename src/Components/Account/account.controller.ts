@@ -1,5 +1,13 @@
 import { RequestHandler } from 'express';
-import { accountValidator, findAccount, findAccountsByUser, IAccount, removeAccount, saveAccount, upgradeAccount } from './account.service';
+import {
+    accountValidator,
+    findAccount,
+    findAccountsByUser,
+    IAccount,
+    removeAccount,
+    saveAccount,
+    upgradeAccount
+} from './account.service';
 import { IUser } from '../Auth/auth.service';
 
 export const createAccount: RequestHandler = async (req, res, next)  => {
@@ -47,9 +55,10 @@ export const readAccounts: RequestHandler = async (req, res, next)  => {
 export const getAccount: RequestHandler = async (req, res, next)  => {
     try {
         const user: IUser = req.user;
-        const userId = user.id;
+        const userId: number = user.id;
         const accountId  = parseInt(req.params.id);
         const account = await findAccount(accountId, userId);
+        console.log(account);
         if (account) {
             return res.status(200).json({
                 status: 'Sucess',
@@ -91,8 +100,8 @@ export const updateAccount: RequestHandler = async (req, res, next) => {
 export const deleteAccount: RequestHandler = async (req, res, next) => {
     try {
         const user: IUser = req.user;
-        const userId = user.id;
-        const accountId  = parseInt(req.params.id);
+        const userId: number = user.id;
+        const accountId: number = parseInt(req.params.id);
         const account = await removeAccount(accountId, userId);
         if (account.affected > 0) {
             return res.status(202).json({
@@ -105,7 +114,7 @@ export const deleteAccount: RequestHandler = async (req, res, next) => {
                 status: 'Not found',
                 data: {
                 }
-            })
+            });
         }
     } catch (error) {
         next(error);

@@ -162,4 +162,4 @@ export const userSetNewPassword: RequestHandler = async (req, res, next) => {
   } catch (error) {
     next(error)
   }
-}
+};
