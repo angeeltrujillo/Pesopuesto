@@ -60,3 +60,7 @@ export const removeTransaction = async (transactionId: number, userId: number) =
     const transaction = await getRepository(Transaction).delete({id: transactionId, user: userId});
     return transaction;
 };
+
+export const sum = (a:number, b:number) => {
+    return a + b;  
+}

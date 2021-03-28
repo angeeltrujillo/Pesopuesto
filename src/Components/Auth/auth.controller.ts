@@ -70,7 +70,7 @@ export const userLogin: RequestHandler = async (req, res, next) => {
     const token = createToken(user.id);
     user.password = undefined;
     return res.status(200).json({
-      status: 'Sucess',
+      status: 'Success',
       token,
       data: {
         user,

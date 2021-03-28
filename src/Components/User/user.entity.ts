@@ -18,7 +18,7 @@ export class User {
     @Column({ unique: true })
     email: string;
 
-    @Column({ nullable: true })
+    @Column({ nullable: true, length: 60})
     password: string;
 
     @Column({type: "enum", enum: ['local', 'google', 'facebook'] })
@@ -35,4 +35,8 @@ export class User {
 
     @Column({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP'})
     createdAt: Date;
+}
+
+function IsEmail() {
+    throw new Error("Function not implemented.");
 }
