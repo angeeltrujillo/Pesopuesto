@@ -74,7 +74,7 @@ describe('Create a new user in the database', () => {
     beforeAll(async () => {
         dotenv.config();
         const databaseUri : string = process.env.DB_URI;
-        let con = await createConnection({
+        const con = await createConnection({
             type: "postgres",
             url: databaseUri,
             entities: [
@@ -90,7 +90,7 @@ describe('Create a new user in the database', () => {
         const defaultConnection = getConnection('default')
         await defaultConnection.close()
     });
-    
+
     test('Return a user if send valid data', async () => {
         const userDetails = {
             firstName: 'Angel',
@@ -136,7 +136,7 @@ describe('Create a new user in the database', () => {
 
 describe('Create a Token JWT', () => {
     test('Return a JWT', () => {
-        const token = createToken(1); 
+        const token = createToken(1);
         expect(token).toHaveLength(137);
     });
 });
@@ -145,7 +145,7 @@ describe('Auth User API Endpoints', () => {
     beforeAll(async () => {
         dotenv.config();
         const databaseUri : string = process.env.DB_URI;
-        let con = await createConnection({
+        const con = await createConnection({
             type: "postgres",
             url: databaseUri,
             entities: [
@@ -161,7 +161,7 @@ describe('Auth User API Endpoints', () => {
         const defaultConnection = getConnection('default')
         await defaultConnection.close()
     });
-    
+
     test('User SignUp with valid data', async () => {
         const userDetails = {
             firstName: 'Angel',
