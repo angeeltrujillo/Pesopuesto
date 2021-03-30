@@ -1,5 +1,6 @@
-import { AfterInsert, BeforeInsert, Column, Entity, getRepository, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { AfterInsert, BeforeInsert, Column, Entity, getRepository, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Account } from '../Account/account.entity'
+import { Category } from "../Category/category.entity";
 import { User } from "../User/user.entity";
 
 export enum TransactionType {
@@ -29,6 +30,10 @@ export class Transaction {
 
     @ManyToOne( () => User, user => user.id)
     user: number
+
+    @ManyToMany(() => Category)
+    @JoinTable()
+    categories: Category[];
 
     @Column({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP'})
     createdAt: Date;

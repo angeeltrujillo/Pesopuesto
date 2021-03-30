@@ -212,5 +212,4 @@ describe('Auth User API Endpoints', () => {
             .send(userDetails)
             .expect(401)
     });
-
 });
